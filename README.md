@@ -37,17 +37,26 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.precomposed
+Type: 'Boolean'
+Default value: false
+
+A value true will create files with precomposed in the file name which will prevent IOS from adding Rounded Corners, Drop Shadow, and Reflective Shine to your icon.
+
+
+#### options.dest
 Type: `String`
-Default value: `',  '`
+Default value: `dest/`
 
-A string value that is used to do something with whatever.
+A string value indicating the path of the directory that will contain the generated files.
 
-#### options.punctuation
+#### options.src
 Type: `String`
-Default value: `'.'`
+Default value: `apple-touch-icon.png`
 
-A string value that is used to do something else with whatever else.
+A string value that indicates the name of the file to be used as the bases for creating the other files. This file must be:
+- 144x144 pixels
+- a png 
 
 ### Usage Examples
 

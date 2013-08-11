@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2013 Donald Perry
  * Licensed under the MIT license.
- */
+*/
 
 'use strict';
 
@@ -14,37 +14,115 @@ module.exports = function(grunt) {
   // creation: http://gruntjs.com/creating-tasks
 
   grunt.registerMultiTask('apple_muncher', 'Generates apple-touch-icons from a single source file.', function() {
+ 
+    var done = this.async();
+    
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      punctuation: '.',
-      separator: ', '
+      src : 'apple-touch-icon.png',
+      dest : 'dest/',
+      precomposed: false
     });
 
-    // Iterate over all specified file groups.
-    this.files.forEach(function(f) {
-      // Concat specified files.
-      var src = f.src.filter(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        } else {
-          return true;
+    //I really want some errors that are going to tell the user what this task really needs so.
+    function InputError (path) {
+      Error.call(this);
+
+      this.name = 'source file error';
+      this.message  = 'the options.src file must exist and be readable as a PNG file at 144x144';
+      this.code  = 949;
+      Error.captureStackTrace(this, this.constructor);
+
+    }
+
+    function OutputError (path) {
+      Error.call(this);
+
+      this.name = 'destination directory error';
+      this.message  = 'the options.dest directory must exist or be createable.';
+      this.code  = 950;
+      Error.captureStackTrace(this, this.constructor);
+
+    }
+
+
+
+    var im = require('node-imagemagick');
+    var fs = require('fs');
+    
+    var iconsizes = [57, 72, 114, 144];
+    
+    grunt.log.writeln('starting ' + options.src);
+    grunt.log.writeln('hold on to your potatoes Dr. Jones');
+
+    fs.stat( options.src,   function (err, stat) {
+      if(err){
+        if( err.code === 'ENOENT')
+          { 
+            grunt.log.error(options.src + ' is missing');
+            throw new InputError();
+          } else {
+            grunt.log.error(err.message);
+            throw err;
+          }
+      }
+      im.identify(options.src, function(err,features){
+        if(err){
+          grunt.log.error(err.message);
+          throw err;
         }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+        if( features.format === "PNG"){
+          grunt.verbose.writeln('PNG File Detected');
+        } else {
+          grunt.log.error(options.src + " must be a png image not a " + features.format);
+          throw new InputError();
+        }
+        if(parseInt(features.width,10) < 144) {
+          grunt.log.error(options.src + " must be more than 144 pixels");
+          throw new InputError();
+        } else {
+          if(features.height === features.width){
+            grunt.verbose.writeln('Correct File Size Detected');
+          }else {
+            grunt.log.error(options.src + " must be a square!");
+            throw new InputError();
+          }
+        }
 
-      // Handle options.
-      src += options.punctuation;
+        fs.stat( options.dest, function (err,stat){
+          if(err){
+            if(err.code === 'ENOENT') {
+              grunt.verbose.writeln(options.dest + " is being created!");
+              fs.mkdirSync(options.dest);
+            } else {
+              grunt.log.error(err.message);
+              throw err;
+            }
+          }
 
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
+          //lets start some work 
+          iconsizes.forEach(function(f){
+            var outputname =  options.dest + "apple-touch-icon-" + f.toString() + "x" + f.toString();
+            grunt.verbose.writeln( options.precomposed );
+            if(options.precomposed === true)
+            {
+              outputname += "-precomposed";
+            }
+            outputname += ".png";
 
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
+            grunt.log.writeln('File "' + outputname + '" is about to be created.' );
+            var imagemagickoptions = {width: f, height: f, srcPath: options.src, dstPath: outputname,format: 'PNG'};
+
+            im.resize( imagemagickoptions, function(err){
+              if(err) {
+                grunt.log.error(outputname + 'could not be created');
+                throw err;
+              }
+              grunt.verbose.writeln(outputname + " was created.");
+            }); 
+          });
+        });
+      });
     });
   });
-
 };
