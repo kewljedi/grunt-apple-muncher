@@ -76,7 +76,7 @@ These files IOS will add Drop Shadow, Reflective Shine, and Rounded Corners to b
 grunt.initConfig({
   apple_muncher: {
     options: {}
-  },
+  }
 })
 ```
 #### Precomposed Icons
@@ -93,11 +93,8 @@ grunt.initConfig({
   apple_muncher: {
     options: {
       precomposed:true
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
+    }
+  }
 })
 ```
 ## Contributing
