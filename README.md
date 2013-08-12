@@ -1,5 +1,7 @@
 # grunt-apple-muncher
 
+> Taking a bite out of the complexities of making your website like apples.
+>
 > Creates apple-touch-icon files from a single file. This is meant to lessen the load on designers and developers everywhere by making sure they don't have to resize their apple touch icons.
 > The [Safari Web Content Guide ](http://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html#//apple_ref/doc/uid/TP40002051-CH3-SW3) has a section on creating the Web Clip Icons.
 > While the [IOS Human Interface Guidelines](http://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/IconsImages/IconsImages.html#//apple_ref/doc/uid/TP40006556-CH14) specifies what devices uses which size.
@@ -19,14 +21,14 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-apple-muncher');
 ```
 
-## The "apple_muncher" task
+## The "munch_webclip_icons" task
 
 ### Overview
-In your project's Gruntfile, add a section named `apple_muncher` to the data object passed into `grunt.initConfig()`.
+In your project's Gruntfile, add a section named `munch_webclip_icons` to the data object passed into `grunt.initConfig()`.
 
 ```js
 grunt.initConfig({
-  apple_muncher: {
+  munch_webclip_icons: {
     options: {
       // Task-specific options go here.
     },
@@ -40,21 +42,21 @@ grunt.initConfig({
 ### Options
 
 #### options.precomposed
-Type: 'Boolean'
-Default value: false
+Type: 'Boolean' 
+Default value: false 
 
 A value true will create files with precomposed in the file name which will prevent IOS from adding Rounded Corners, Drop Shadow, and Reflective Shine to your icon.
 
 
 #### options.dest
-Type: `String`
-Default value: `dest/`
+Type: `String` 
+Default value: `dest/` 
 
 A string value indicating the path of the directory that will contain the generated files.
 
 #### options.src
-Type: `String`
-Default value: `apple-touch-icon.png`
+Type: `String` 
+Default value: `apple-touch-icon.png` 
 
 A string value that indicates the name of the file to be used as the bases for creating the other files. This file must be:
 - at least 144 pixels wide
@@ -74,7 +76,7 @@ These files IOS will add Drop Shadow, Reflective Shine, and Rounded Corners to b
 
 ```js
 grunt.initConfig({
-  apple_muncher: {
+  munch_webclip_icons: {
     options: {}
   }
 })
@@ -86,11 +88,11 @@ In this example, the precomposed options is used to create the following files b
 - apple-touch-icon-114x114-precomposed.png
 - apple-touch-icon-144x144-precomposed.png
 
-IOS will display these file without appying any changes.
+IOS will display these file without appying any effects.
 
 ```js
 grunt.initConfig({
-  apple_muncher: {
+  munch_webclip_icons: {
     options: {
       precomposed:true
     }

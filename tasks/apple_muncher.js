@@ -13,7 +13,7 @@ module.exports = function(grunt) {
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
-  grunt.registerMultiTask('apple_muncher', 'Generates apple-touch-icons from a single source file.', function() {
+  grunt.registerMultiTask('munch_webclip_icons', 'Generates apple-touch-icons from a single source file.', function() {
  
     var done = this.async();
     
