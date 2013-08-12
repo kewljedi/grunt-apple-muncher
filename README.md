@@ -1,6 +1,8 @@
 # grunt-apple-muncher
 
-> Creates apple-touch-icon files from a single file
+> Creates apple-touch-icon files from a single file. This is meant to lessen the load on designers and developers everywhere by making sure they don't have to resize their apple touch icons.
+> The [Safari Web Content Guide ](http://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html#//apple_ref/doc/uid/TP40002051-CH3-SW3) has a section on creating the Web Clip Icons.
+> While the [IOS Human Interface Guidelines](http://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/IconsImages/IconsImages.html#//apple_ref/doc/uid/TP40006556-CH14) specifies what devices uses which size.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.1`
@@ -55,13 +57,20 @@ Type: `String`
 Default value: `apple-touch-icon.png`
 
 A string value that indicates the name of the file to be used as the bases for creating the other files. This file must be:
-- 144x144 pixels
+- at least 144 pixels wide
+- a square
 - a png 
 
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+In this example, the default options are used to create the following files based on the src 'apple-touch-icon.png':
+- apple-touch-icon-57x57.png
+- apple-touch-icon-72x72.png
+- apple-touch-icon-114x114.png
+- apple-touch-icon-144x144.png
+
+These files IOS will add Drop Shadow, Reflective Shine, and Rounded Corners to before displaying them.
 
 ```js
 grunt.initConfig({
@@ -73,16 +82,20 @@ grunt.initConfig({
   },
 })
 ```
+#### Precomposed Icons
+In this example, the precomposed options is used to create the following files based on the src 'apple-touch-icon.png':
+- apple-touch-icon-57x57-precomposed.png
+- apple-touch-icon-72x72-precomposed.png
+- apple-touch-icon-114x114-precomposed.png
+- apple-touch-icon-144x144-precomposed.png
 
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+IOS will display these file without appying any changes.
 
 ```js
 grunt.initConfig({
   apple_muncher: {
     options: {
-      separator: ': ',
-      punctuation: ' !!!',
+      precomposed:true
     },
     files: {
       'dest/default_options': ['src/testing', 'src/123'],
@@ -90,7 +103,6 @@ grunt.initConfig({
   },
 })
 ```
-
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
