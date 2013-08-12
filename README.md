@@ -75,10 +75,7 @@ These files IOS will add Drop Shadow, Reflective Shine, and Rounded Corners to b
 ```js
 grunt.initConfig({
   apple_muncher: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+    options: {}
   },
 })
 ```
