@@ -26,9 +26,16 @@ module.exports = function(grunt) {
 
     // Before generating any new files, remove any previously-created files.
     clean: {
-      tests: ['tmp'],
+      tests: ['dest'],
+      copy: ['apple-touch-icon.png']
     },
-
+    copy: {
+      main: {
+        files:[
+          { src:'test/fixtures/apple-touch-icon.png', dest:'apple-touch-icon.png'}
+        ]
+      }
+    },
     // Configuration to be run (and then tested).
     munch_webclip_icons: {
       default_options: {
@@ -37,6 +44,8 @@ module.exports = function(grunt) {
       },
       custom_options: {
         options: {
+          src:'test/fixtures/apple-touch-icon.png',
+          precomposed:true
         }
       }
     },
@@ -55,10 +64,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'munch_webclip_icons', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'copy', 'munch_webclip_icons', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);

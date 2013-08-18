@@ -42,8 +42,8 @@ grunt.initConfig({
 ### Options
 
 #### options.precomposed
-Type: 'Boolean' 
-Default value: false 
+Type: `Boolean`
+Default value: `false`
 
 A value true will create files with precomposed in the file name which will prevent IOS from adding Rounded Corners, Drop Shadow, and Reflective Shine to your icon.
 

@@ -8,6 +8,8 @@
 
 'use strict';
 
+var async = require('async');
+
 module.exports = function(grunt) {
 
   // Please see the Grunt documentation for more information regarding task
@@ -25,7 +27,7 @@ module.exports = function(grunt) {
     });
 
     //I really want some errors that are going to tell the user what this task really needs so.
-    function InputError (path) {
+    function InputError () {
       Error.call(this);
 
       this.name = 'source file error';
@@ -35,25 +37,12 @@ module.exports = function(grunt) {
 
     }
 
-    function OutputError (path) {
-      Error.call(this);
-
-      this.name = 'destination directory error';
-      this.message  = 'the options.dest directory must exist or be createable.';
-      this.code  = 950;
-      Error.captureStackTrace(this, this.constructor);
-
-    }
-
-
-
     var im = require('node-imagemagick');
     var fs = require('fs');
     
     var iconsizes = [57, 72, 114, 144];
     
-    grunt.log.writeln('starting ' + options.src);
-    grunt.log.writeln('hold on to your potatoes Dr. Jones');
+    grunt.verbose.writeln('starting ' + options.src);
 
     fs.stat( options.src,   function (err, stat) {
       if(err){
@@ -101,25 +90,33 @@ module.exports = function(grunt) {
           }
 
           //lets start some work 
-          iconsizes.forEach(function(f){
-            var outputname =  options.dest + "apple-touch-icon-" + f.toString() + "x" + f.toString();
+          async.forEach(iconsizes, function(f ,callback ){
+            var outputname =  options.dest + 'apple-touch-icon-' + f.toString() + 'x' + f.toString();
             grunt.verbose.writeln( options.precomposed );
             if(options.precomposed === true)
             {
-              outputname += "-precomposed";
+              outputname += '-precomposed';
             }
-            outputname += ".png";
+            outputname += '.png';
 
-            grunt.log.writeln('File "' + outputname + '" is about to be created.' );
+            grunt.verbose.writeln('File "' + outputname + '" is about to be created.' );
             var imagemagickoptions = {width: f, height: f, srcPath: options.src, dstPath: outputname,format: 'PNG'};
 
             im.resize( imagemagickoptions, function(err){
               if(err) {
                 grunt.log.error(outputname + 'could not be created');
-                throw err;
+              } else {
+                err = null;
               }
-              grunt.verbose.writeln(outputname + " was created.");
+              grunt.verbose.writeln(outputname + ' was created.');
+              callback(err);
             }); 
+          },function(err)
+          {
+            if(err){
+              grunt.log.error(err.message);
+            }
+            done();
           });
         });
       });
