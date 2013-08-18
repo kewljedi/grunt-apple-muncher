@@ -50,6 +50,15 @@ module.exports = function(grunt) {
       }
     },
 
+    munch_apple_touch_startup_image: {
+      custom_options: {
+        options: {
+          partial: 'dest/partials/startupimage.html',
+          dest: 'dest/'
+        }
+      }
+    },
+
     // Unit tests.
     nodeunit: {
       tests: ['test/*_test.js'],
@@ -68,7 +77,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'copy', 'munch_webclip_icons', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'copy', 'munch_webclip_icons','munch_apple_touch_startup_image', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);

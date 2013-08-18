@@ -14,6 +14,82 @@ module.exports = function(grunt) {
 
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
+  grunt.registerMultiTask('munch_apple_touch_startup_image', 'Generates Apple startup Images from a single source.', function() {
+    //figure I at least need to get some of my ideas out of my head.
+    
+    var done = this.async();
+ 
+    // Merge task-specific and/or target-specific options with these defaults.
+    var options = this.options({
+      src : 'apple-touch-icon.png',
+      dest : 'dest/',
+      partial: 'dest/partials/startup.html'
+    });
+
+
+    var outputpartial = String();
+    if(options.partial)
+    {
+      outputpartial += '<meta name="apple-mobile-web-app-capable" content="yes" />\n';
+    }
+
+    //yes, I think I will need all of this... that way changes in the future are easier.
+    var startupsizes = [
+      { height:320, width:460, dw:320, retina:false, orientation:'both' },
+      { height:640, width:920, dw:320, retina:true, orientation:'both' },
+      { height:768, width:1004, dw:768, retina:false, orientation:'portrait' },
+      { height:748, width:1024, dw:768, retina:false, orientation:'landscape' },
+      { height:1536, width:2008, dw:1536, retina:true, orientation:'portrait' },
+      { height:2048, width:1496, dw:1536, retina:true, orientation:'landscape' },
+    ];
+
+    async.forEach( 
+      startupsizes, 
+      function(f, callback) {
+    
+        var filename = options.dest + 'apple-touch-startup-image-' + f.height + 'x' + f.width + '.png';
+
+
+        //if they asked for a partial file to be generated figure out what we need to add for this size.
+        if(options.partial)
+        {
+          //yes I feel the link needs to be written out dynamically even though I will most likely test it against a static file.
+          //I think this will allow for more features or easier changes in the future.
+          var linktext = '<link href="';
+          linktext += filename;
+          linktext += '" media="screen and (min-device-width: '+ f.dw + 'px)';
+
+          if(f.orientation !== 'both')
+          {
+            linktext += ' and (orientation: '+ f.orientation + ')';
+          }
+
+          if(f.retina)
+          {
+            linktext += ' and (-webkit-min-device-pixel-ratio: 2)';
+          }
+
+          linktext += '" rel="apple-touch-startup-image" />';
+          outputpartial += linktext + '\n';
+        }
+
+
+        callback(null);
+
+      }, 
+      function(err) {
+        if(err) {
+          grunt.log.error(err.message);
+        }
+        if(options.partial){
+          grunt.file.write(options.partial, outputpartial);
+        }
+        done();
+      } 
+    );
+  
+  });
+
 
   grunt.registerMultiTask('munch_webclip_icons', 'Generates apple-touch-icons from a single source file.', function() {
  
