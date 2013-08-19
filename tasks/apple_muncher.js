@@ -89,15 +89,22 @@ module.exports = function(grunt) {
             }
           }
 
+          var outputpartial = String();
+
           //lets start some work 
           async.forEach(iconsizes, function(f ,callback ){
-            var outputname =  options.dest + 'apple-touch-icon-' + f.toString() + 'x' + f.toString();
-            grunt.verbose.writeln( options.precomposed );
+            var outputname = 'apple-touch-icon-' + f.toString() + 'x' + f.toString();
             if(options.precomposed === true)
             {
               outputname += '-precomposed';
             }
             outputname += '.png';
+
+            if(options.partial) {
+              outputpartial += '<link rel="apple-touch-icon" sizes="' + f.toString() + 'x' + f.toString() + '" href="' + outputname + '" />\n';
+            }
+
+            outputname = options.dest + outputname;
 
             grunt.verbose.writeln('File "' + outputname + '" is about to be created.' );
             var imagemagickoptions = {width: f, height: f, srcPath: options.src, dstPath: outputname,format: 'PNG'};
@@ -116,6 +123,10 @@ module.exports = function(grunt) {
             if(err){
               grunt.log.error(err.message);
             }
+            if( options.partial ) {
+              grunt.file.write( options.partial, outputpartial );
+            }
+
             done();
           });
         });

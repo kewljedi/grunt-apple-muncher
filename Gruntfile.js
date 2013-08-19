@@ -45,7 +45,8 @@ module.exports = function(grunt) {
       custom_options: {
         options: {
           src:'test/fixtures/apple-touch-icon.png',
-          precomposed:true
+          precomposed:true,
+          partial:'dest/partials/webclip.html'
         }
       }
     },

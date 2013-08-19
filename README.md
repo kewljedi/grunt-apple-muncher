@@ -63,6 +63,18 @@ A string value that indicates the name of the file to be used as the bases for c
 - a square
 - a png 
 
+#### options.partial
+Type: `String` 
+Default value: null
+
+The name of a file to write out the 'link' statements to. The contents of the file should look something like this:
+> <link rel="apple-touch-icon" sizes="57x57" href="apple-touch-icon-57x57-precomposed.png" />
+> <link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon-72x72-precomposed.png" />
+> <link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon-114x114-precomposed.png" />
+> <link rel="apple-touch-icon" sizes="144x144" href="apple-touch-icon-144x144-precomposed.png" />
+
+Awesome for use with Jekyll, or any other system that can combine partial html files.
+
 ### Usage Examples
 
 #### Default Options
